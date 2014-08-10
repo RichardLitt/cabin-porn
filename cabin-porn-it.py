@@ -17,7 +17,17 @@ https://github.com/grahamgilbert/macscripts/tree/master/set_desktops
 from bs4 import BeautifulSoup
 from AppKit import NSWorkspace, NSScreen
 from Foundation import NSURL
+from optparse import OptionParser
 import requests, glob, random, re, urllib, os, fnmatch, sys
+
+# Set the options
+parser = OptionParser()
+parser.add_option("-p", "--path", dest="base_dir",
+                  help="write cabins to PATH", metavar="PATH")
+parser.add_option("-r", "--random", action="store_true",
+                  dest="random_cabin", default=False,
+                  help="pick a random cabin")
+(options, args) = parser.parse_args()
 
 # Grab the html
 r  = requests.get("http://cabinporn.com")
@@ -35,7 +45,7 @@ for image in soup.find_all('img'):
 
 # Choose one of the pictures to download. If random is flagged, pick one from
 # the top page. Else, just choose the most recent.
-if sys.argv[1] == '-r':
+if options.random_cabin:
   picture_path = random.choice(cabin_images)
 else:
   picture_path = cabin_images[0]
@@ -44,8 +54,8 @@ else:
 picture_name = picture_path.split('/')[-1]
 
 # Create a directory for it. Set second arg as directory if given.
-if len(sys.argv) == 3 and sys.argv[2]:
-  base_dir = sys.argv[2].split('=')[1]
+if options.base_dir:
+  base_dir = options.base_dir
   if base_dir[-1] != '/':
     base_dir = base_dir + '/'
 else:
