@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 '''
 Sets the current screen to a cabin from CabinPorn.com.
@@ -59,7 +59,7 @@ if options.base_dir:
   if base_dir[-1] != '/':
     base_dir = base_dir + '/'
 else:
-  base_dir = './cabin-porn/'
+  base_dir = './pictures/'
 
 if not os.path.exists(base_dir):
     os.makedirs(base_dir)
