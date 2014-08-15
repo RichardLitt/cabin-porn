@@ -8,7 +8,7 @@ folder in the current directory.
 
 Optional arguments:
   1. '-r', choose a random image from the current page
-  2. '-n', choose a specific image by the page id
+  2. '-i', choose a specific image by the page id
   3. 'path=BASE_DIR', choose a directory for the photos to be put into
 
 Based originally on code to set desktop pictures for all screens from:
