@@ -8,7 +8,9 @@ folder in the current directory.
 
 To run: `python cabin-porn-it.py`.
 
-You may also need to install bs4. That should be: `$ pip install BeautifulSoup4`.
+You may also need to install bs4 and requests. To do so:
+
+`sudo pip install requests beautifulsoup4`
 
 Alternatively, if you want to set it up to be automatic:
 
