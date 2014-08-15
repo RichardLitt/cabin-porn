@@ -8,7 +8,8 @@ folder in the current directory.
 
 Optional arguments:
   1. '-r', choose a random image from the current page
-  2. 'path=BASE_DIR', choose a directory for the photos to be put into
+  2. '-n', choose a specific image by the page id
+  3. 'path=BASE_DIR', choose a directory for the photos to be put into
 
 Based originally on code to set desktop pictures for all screens from:
 https://github.com/grahamgilbert/macscripts/tree/master/set_desktops
@@ -27,10 +28,18 @@ parser.add_option("-p", "--path", dest="base_dir",
 parser.add_option("-r", "--random", action="store_true",
                   dest="random_cabin", default=False,
                   help="pick a random cabin")
+parser.add_option("-i", "--image", dest="image",
+                  type="int", default=0,
+                  help="pick a specific cabin, by image id")
 (options, args) = parser.parse_args()
 
+# Set the root URL
+url = "http://cabinporn.com"
+if options.image:
+  url = url + "/post/" + str(options.image)
+
 # Grab the html
-r  = requests.get("http://cabinporn.com")
+r  = requests.get(url)
 data = r.text
 soup = BeautifulSoup(data)
 
