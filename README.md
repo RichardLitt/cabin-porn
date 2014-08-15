@@ -24,9 +24,10 @@ If you want it to happen a few times a day, type: `env EDITOR=nano crontab -e`. 
 
 _Requires_: Python 2.7+, Mac OSX Mavericks
 
-Possible arguments:  
+Possible arguments:
 
-  * '-r', choose a random image from the current page  
-  * 'path=BASE_DIR', choose a directory for the photos to be put into  
+* '-r', choose a random image from the current page
+* '-i', choose a specific image by the post id
+* 'path=BASE_DIR', choose a directory for the photos to be put into
 
-This is a very simple script. It sets the current picture. It doesn't look through the CP archives. It only works on Mac OSX Mavericks. It does not run itself, although setting a cron job up is totally possible. I just wanted a way to do this automatically. PRs accepted but not expected.
+This is a very simple script. It only works on Mac OSX Mavericks. It does not run itself, although setting a cron job up is totally possible. I just wanted a way to do this automatically. PRs accepted but not expected.
