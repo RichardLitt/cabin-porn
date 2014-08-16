@@ -80,10 +80,6 @@ if not os.path.isfile(base_dir + picture_name):
 # generate a fileURL for the desktop picture
 file_url = NSURL.fileURLWithPath_(base_dir + picture_name)
 
-# make image options dictionary
-# we just make an empty one because the defaults are fine
-options = {}
-
 # get shared workspace
 ws = NSWorkspace.sharedWorkspace()
 
@@ -91,4 +87,4 @@ ws = NSWorkspace.sharedWorkspace()
 for screen in NSScreen.screens():
     # tell the workspace to set the desktop picture
     (result, error) = ws.setDesktopImageURL_forScreen_options_error_(
-                file_url, screen, options, None)
+                file_url, screen, ws.desktopImageOptionsForScreen_(screen), None)
