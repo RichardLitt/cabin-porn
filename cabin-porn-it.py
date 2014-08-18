@@ -47,7 +47,7 @@ soup = BeautifulSoup(data)
 cabin_images = []
 for image in soup.find_all('img'):
   image_src = image.get('src')
-  if not re.search("cabin_porn", image_src) and re.search("jpg", image_src):
+  if not re.search("cabin_porn", image_src) and re.search("jpg|png", image_src):
     cabin_images.append(str(image_src))
     # output.write("\"" +  credits_no.group(0) + "\",",)
     # print(image.get('src'))
