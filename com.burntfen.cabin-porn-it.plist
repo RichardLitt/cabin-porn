@@ -4,7 +4,7 @@
 <dict>
     <key>Label</key>
     <string>com.burntfen.cabin-porn-it</string>
-    <key>OnDemand</key>
+    <key>RunAtLoad</key>
     <true/>
     <key>ProgramArguments</key>
     <array>
