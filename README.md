@@ -24,8 +24,7 @@ Alternatively, if you want to set it up to be automatic:
 
 ```
 chmod a+x cabin-porn-it.py
-export PATH=$PATH:`pwd`
-ln -s /path/to/cabin-porn-it.py /usr/bin/cabin
+ln -s $(pwd)/cabin-porn-it.py /usr/local/bin/cabin
 ```
 
 This will allow you to type `$ cabin` whenever you, you know, want a new cabin. Note: If you set this up, the base dir will be relative to your home folder. Adding in an absolute path as the base directory will stop this from putting pictures into your base Pictures/ folder. For instance: `$ cabin path=/Users/richard/Pictures/cabins`. 
