@@ -4,12 +4,12 @@
 <dict>
     <key>Label</key>
     <string>com.burntfen.cabin-porn-it</string>
-    <key>OnDemand</key>
+    <key>RunAtLoad</key>
     <true/>
     <key>ProgramArguments</key>
     <array>
         <string>/usr/bin/python</string>
-        <string>/usr/bin/cabin</string>
+        <string>/usr/local/bin/cabin</string>
     </array>
     <key>StartInterval</key>
     <integer>3600</integer>

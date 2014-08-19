@@ -68,7 +68,7 @@ if options.base_dir:
   if base_dir[-1] != '/':
     base_dir = base_dir + '/'
 else:
-  base_dir = './Pictures/Cabins/'
+  base_dir = os.path.dirname(os.path.realpath(__file__)) + '/Pictures/Cabins/'
 
 if not os.path.exists(base_dir):
     os.makedirs(base_dir)
