@@ -33,6 +33,18 @@ parser.add_option("-i", "--image", dest="image",
                   help="pick a specific cabin, by image id")
 (options, args) = parser.parse_args()
 
+# Create a directory for image storage
+if options.base_dir:
+  base_dir = options.base_dir
+  if base_dir[-1] != '/':
+    base_dir = base_dir + '/'
+# If the base directory is not set, we use ./Pictures/Cabins instead
+else:
+  base_dir = os.path.dirname(os.path.realpath(__file__)) + '/Pictures/Cabins/'
+
+if not os.path.exists(base_dir):
+    os.makedirs(base_dir)
+
 # Set the root URL
 url = "http://cabinporn.com"
 if options.image:
@@ -61,17 +73,6 @@ else:
 
 # Isolate the filename
 picture_name = picture_path.split('/')[-1]
-
-# Create a directory for it. Set second arg as directory if given.
-if options.base_dir:
-  base_dir = options.base_dir
-  if base_dir[-1] != '/':
-    base_dir = base_dir + '/'
-else:
-  base_dir = os.path.dirname(os.path.realpath(__file__)) + '/Pictures/Cabins/'
-
-if not os.path.exists(base_dir):
-    os.makedirs(base_dir)
 
 # Download the file if you haven't already
 if not os.path.isfile(base_dir + picture_name):
