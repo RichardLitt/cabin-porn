@@ -67,7 +67,7 @@ for image in soup.find_all('img'):
 # Choose one of the pictures to download. If random is flagged, pick one from
 # the top page. Else, just choose the most recent.
 if options.random_cabin:
-  cabin = random.choice(cabin_images)
+  cabin = random.choice(cabins)
 else:
   cabin = cabins[0]
 
