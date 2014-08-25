@@ -56,30 +56,40 @@ data = r.text
 soup = BeautifulSoup(data)
 
 # Get a list of all of the images of cabins
-cabin_images = []
+cabins = []
 for image in soup.find_all('img'):
   image_src = image.get('src')
   if not re.search("cabin_porn", image_src) and re.search("jpg|png", image_src):
-    cabin_images.append(str(image_src))
-    # output.write("\"" +  credits_no.group(0) + "\",",)
+    cabins.append({ "src" : str(image_src), "link": str(image.get('title')) })
     # print(image.get('src'))
+    # print(image.get('title'))
 
 # Choose one of the pictures to download. If random is flagged, pick one from
 # the top page. Else, just choose the most recent.
 if options.random_cabin:
-  picture_path = random.choice(cabin_images)
+  cabin = random.choice(cabin_images)
 else:
-  picture_path = cabin_images[0]
+  cabin = cabins[0]
 
-# Isolate the filename
-picture_name = picture_path.split('/')[-1]
+# Local filename for the image is the descriptive post link
+post_name = re.search('/post/(.+)$', cabin["link"]).group(1)
+image_ext = os.path.splitext(cabin["src"])[1]
 
-# Download the file if you haven't already
-if not os.path.isfile(base_dir + picture_name):
-  urllib.urlretrieve(picture_path, base_dir + picture_name)
+# eg: 12345-some-cool-place.jpg
+image_file = post_name.replace('/', '-') + image_ext
+
+# Previously, images were stored using the raw image name, so if an older image
+# exists, just move the old file to the new location
+old_file = cabin["src"].split('/')[-1]
+if os.path.isfile(base_dir + old_file):
+  os.rename(base_dir + old_file, base_dir + image_file)
+
+# If the image has not already been downloaded, get it now
+if not os.path.isfile(base_dir + image_file):
+  urllib.urlretrieve(cabin["src"], base_dir + image_file)
 
 # generate a fileURL for the desktop picture
-file_url = NSURL.fileURLWithPath_(base_dir + picture_name)
+file_url = NSURL.fileURLWithPath_(base_dir + image_file)
 
 # get shared workspace
 ws = NSWorkspace.sharedWorkspace()
