@@ -40,7 +40,7 @@ if options.base_dir:
     base_dir = base_dir + '/'
 # If the base directory is not set, we use ./Pictures/Cabins instead
 else:
-  base_dir = os.path.dirname(os.path.realpath(__file__)) + '/Pictures/Cabins/'
+  base_dir = os.path.dirname(os.path.realpath(__file__)) + '/Cabins/'
 
 if not os.path.exists(base_dir):
     os.makedirs(base_dir)
