@@ -36,11 +36,11 @@ parser.add_option("-i", "--image", dest="image",
 # Create a directory for image storage
 if options.base_dir:
   base_dir = options.base_dir
-  if base_dir[-1] != '/':
-    base_dir = base_dir + '/'
+  if base_dir[-1] != "/":
+    base_dir = base_dir + "/"
 # If the base directory is not set, we use ./Pictures/Cabins instead
 else:
-  base_dir = os.path.dirname(os.path.realpath(__file__)) + '/Cabins/'
+  base_dir = os.path.dirname(os.path.realpath(__file__)) + "/Cabins/"
 
 if not os.path.exists(base_dir):
     os.makedirs(base_dir)
@@ -57,12 +57,13 @@ soup = BeautifulSoup(data)
 
 # Get a list of all of the images of cabins
 cabins = []
-for image in soup.find_all('img'):
-  image_src = image.get('src')
+for image in soup.find_all("img"):
+  image_src = image.get("src")
   if not re.search("cabin_porn", image_src) and re.search("jpg|png", image_src):
-    cabins.append({ "src" : str(image_src), "link": str(image.get('title')) })
-    # print(image.get('src'))
-    # print(image.get('title'))
+    link_str = str(image.get("title"))
+    if link_str == "None":
+      link_str = image.find_parent("li", "post").find("div", "fb-like").get("data-href")
+    cabins.append({ "src" : str(image_src), "link": link_str })
 
 # Choose one of the pictures to download. If random is flagged, pick one from
 # the top page. Else, just choose the most recent.
