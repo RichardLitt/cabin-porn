@@ -9,7 +9,8 @@ folder in the current directory.
 Optional arguments:
   1. '-r', choose a random image from the current page
   2. '-i', choose a specific image by the page id
-  3. 'path=BASE_DIR', choose a directory for the photos to be put into
+  3. '-l', limit files to images larger than 1024x748
+  4. 'path=BASE_DIR', choose a directory for the photos to be put into
 
 Based originally on code to set desktop pictures for all screens from:
 https://github.com/grahamgilbert/macscripts/tree/master/set_desktops
@@ -20,7 +21,6 @@ from AppKit import NSWorkspace, NSScreen
 from Foundation import NSURL
 from optparse import OptionParser
 import requests, glob, random, re, urllib, os, fnmatch, sys
-from PIL import Image
 
 # Set the options
 parser = OptionParser()
@@ -108,6 +108,7 @@ def setFile():
 
 # Check the size of the file
 if options.large_only:
+  from PIL import Image
   im = Image.open(base_dir + image_file).size
   if im[0] >= 1024 and im[1] >= 768:
     print('Image is large:', im)

@@ -16,6 +16,8 @@ To run: `python cabin-porn-it.py`.
 
 You may also need to install bs4 and requests. To do so, run: `sudo pip install requests beautifulsoup4`.
 
+If you plan to use the large image flag, you will need to install `pillow`. This is complicated. I would suggest installing the [source file](https://pypi.python.org/pypi/Pillow/2.6.1) and running `python setup.py install`.
+
 _Requirements_: Python 2.7+, Mac OSX Mavericks
 
 ###Automate
@@ -43,4 +45,5 @@ If you want to use the old crontab, type: `env EDITOR=nano crontab -e`. From the
 
 * '-r', choose a random image from the current page
 * '-i', choose a specific image by the post id
+* '-l', limit images to images larger than 1024x748
 * 'path=BASE_DIR', choose a directory for the photos to be put into
