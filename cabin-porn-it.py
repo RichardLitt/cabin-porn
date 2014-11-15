@@ -20,6 +20,7 @@ from AppKit import NSWorkspace, NSScreen
 from Foundation import NSURL
 from optparse import OptionParser
 import requests, glob, random, re, urllib, os, fnmatch, sys
+from PIL import Image
 
 # Set the options
 parser = OptionParser()
@@ -31,6 +32,9 @@ parser.add_option("-r", "--random", action="store_true",
 parser.add_option("-i", "--image", dest="image",
                   type="int", default=0,
                   help="pick a specific cabin, by image id")
+parser.add_option("-l", "--large-only", dest="large_only",
+                  help="only use large images", default=False,
+                  action="store_true")
 (options, args) = parser.parse_args()
 
 # Create a directory for image storage
@@ -89,14 +93,26 @@ if os.path.isfile(base_dir + old_file):
 if not os.path.isfile(base_dir + image_file):
   urllib.urlretrieve(cabin["src"], base_dir + image_file)
 
-# generate a fileURL for the desktop picture
-file_url = NSURL.fileURLWithPath_(base_dir + image_file)
+def setFile():
+  # generate a fileURL for the desktop picture
+  file_url = NSURL.fileURLWithPath_(base_dir + image_file)
 
-# get shared workspace
-ws = NSWorkspace.sharedWorkspace()
+  # get shared workspace
+  ws = NSWorkspace.sharedWorkspace()
 
-# iterate over all screens
-for screen in NSScreen.screens():
-    # tell the workspace to set the desktop picture
-    (result, error) = ws.setDesktopImageURL_forScreen_options_error_(
-                file_url, screen, ws.desktopImageOptionsForScreen_(screen), None)
+  # iterate over all screens
+  for screen in NSScreen.screens():
+      # tell the workspace to set the desktop picture
+      (result, error) = ws.setDesktopImageURL_forScreen_options_error_(
+                  file_url, screen, ws.desktopImageOptionsForScreen_(screen), None)
+
+# Check the size of the file
+if options.large_only:
+  im = Image.open(base_dir + image_file).size
+  if im[0] >= 1024 and im[1] >= 768:
+    print('Image is large:', im)
+    setFile()
+  else: 
+    print('Image is too small:', im) # (width,height) tuple
+else: 
+  setFile()
