@@ -21,6 +21,8 @@ from AppKit import NSWorkspace, NSScreen
 from Foundation import NSURL
 from optparse import OptionParser
 import requests, glob, random, re, urllib, os, fnmatch, sys
+from os import listdir
+from os.path import isfile, join
 
 # Set the options
 parser = OptionParser()
@@ -34,6 +36,9 @@ parser.add_option("-i", "--image", dest="image",
                   help="pick a specific cabin, by image id")
 parser.add_option("-l", "--large-only", dest="large_only",
                   help="only use large images", default=False,
+                  action="store_true")
+parser.add_option("-o", "--offline", dest="offline",
+                  help="use offline", default=False,
                   action="store_true")
 (options, args) = parser.parse_args()
 
@@ -56,46 +61,54 @@ if options.image:
 
 # Grab the html
 r  = requests.get(url)
-data = r.text
-soup = BeautifulSoup(data)
+if r.status_code == 200:
+  data = r.text
+  soup = BeautifulSoup(data)
 
-# Get a list of all of the images of cabins
-cabins = []
-for image in soup.find_all("img"):
-  image_src = image.get("src")
-  if not re.search("cabin_porn", image_src) and re.search("jpg|png", image_src):
-    link_str = str(image.get("title"))
-    if link_str == "None":
-      link_str = image.find_parent("li", "post").find("div", "fb-like").get("data-href")
-    cabins.append({ "src" : str(image_src), "link": link_str })
+  # Get a list of all of the images of cabins
+  cabins = []
+  for image in soup.find_all("img"):
+    image_src = image.get("src")
+    if not re.search("cabin_porn", image_src) and re.search("jpg|png", image_src):
+      link_str = str(image.get("title"))
+      if link_str == "None":
+        link_str = image.find_parent("li", "post").find("div", "fb-like").get("data-href")
+      cabins.append({ "src" : str(image_src), "link": link_str })
 
-# Choose one of the pictures to download. If random is flagged, pick one from
-# the top page. Else, just choose the most recent.
-if options.random_cabin:
-  cabin = random.choice(cabins)
-else:
-  cabin = cabins[0]
+  # Choose one of the pictures to download. If random is flagged, pick one from
+  # the top page. Else, just choose the most recent.
+  if options.random_cabin:
+    cabin = random.choice(cabins)
+  else:
+    cabin = cabins[0]
 
-# Local filename for the image is the descriptive post link
-post_name = re.search('/post/(.+)$', cabin["link"]).group(1)
-image_ext = os.path.splitext(cabin["src"])[1]
+  # Local filename for the image is the descriptive post link
+  post_name = re.search('/post/(.+)$', cabin["link"]).group(1)
+  image_ext = os.path.splitext(cabin["src"])[1]
 
-# eg: 12345-some-cool-place.jpg
-image_file = post_name.replace('/', '-') + image_ext
+  # eg: 12345-some-cool-place.jpg
+  image_file = post_name.replace('/', '-') + image_ext
 
-# Previously, images were stored using the raw image name, so if an older image
-# exists, just move the old file to the new location
-old_file = cabin["src"].split('/')[-1]
-if os.path.isfile(base_dir + old_file):
-  os.rename(base_dir + old_file, base_dir + image_file)
+  # Previously, images were stored using the raw image name, so if an older image
+  # exists, just move the old file to the new location
+  old_file = cabin["src"].split('/')[-1]
+  if os.path.isfile(base_dir + old_file):
+    os.rename(base_dir + old_file, base_dir + image_file)
 
-# If the image has not already been downloaded, get it now
-if not os.path.isfile(base_dir + image_file):
-  urllib.urlretrieve(cabin["src"], base_dir + image_file)
+  # If the image has not already been downloaded, get it now
+  if not os.path.isfile(base_dir + image_file):
+    urllib.urlretrieve(cabin["src"], base_dir + image_file)
+elif r.status_code != 200:
+  print('You are not connected to the internet. Choosing old cabin')
+
+  # Select all of the cabins in the folder, and pick a random one
+  cabins = [ f for f in listdir(base_dir) if isfile(join(base_dir, f)) ]
+  image_file = random.choice(cabins)
+
 
 def setFile():
   # generate a fileURL for the desktop picture
-  file_url = NSURL.fileURLWithPath_(base_dir + image_file)
+  file_path = NSURL.fileURLWithPath_(base_dir + image_file)
 
   # get shared workspace
   ws = NSWorkspace.sharedWorkspace()
@@ -104,7 +117,7 @@ def setFile():
   for screen in NSScreen.screens():
       # tell the workspace to set the desktop picture
       (result, error) = ws.setDesktopImageURL_forScreen_options_error_(
-                  file_url, screen, ws.desktopImageOptionsForScreen_(screen), None)
+                  file_path, screen, ws.desktopImageOptionsForScreen_(screen), None)
 
 # Check the size of the file
 if options.large_only:
