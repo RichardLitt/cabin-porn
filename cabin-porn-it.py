@@ -67,14 +67,15 @@ if r.status_code == 200:
 
   # Get a list of all of the images of cabins
   cabins = []
-  for photo in soup.find_all("div", "photo_div"):
-    image = photo.find("img")
-    image_src = str(image.get("src"))
-    if re.search("jpg|png", image_src):
-      link_str = str(image.get("title"))
-      if link_str == "None":
-        link_str = image.find_parent("li", "post").find("div", "fb-like").get("data-href")
-      cabins.append({ "src" : image_src, "link": link_str })
+  for post in soup.find_all("li", "post"):
+    for photo in post.find_all("div", "photo_div") + post.find_all("div", "photoset_div"):
+      image = photo.find("img")
+      image_src = str(image.get("src"))
+      if re.search("jpg|png", image_src):
+        link_str = str(image.get("title"))
+        if link_str == "None":
+          link_str = post.find("div", "fb-like").get("data-href")
+        cabins.append({ "src" : image_src, "link": link_str })
 
   # Choose one of the pictures to download. If random is flagged, pick one from
   # the top page. Else, just choose the most recent.
