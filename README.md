@@ -8,15 +8,38 @@ folder in the current directory.
 
 PRs accepted but not expected.
 
-###Installation
+### Installation
 
 Download cabin-porn-it.py to wherever you want, or clone this entire repository.
 
-To run: `python cabin-porn-it.py`.
+Run using `python cabin-porn-it.py` or see below for creating a `cabin` global alias.
 
-You may also need to install bs4 and requests. To do so, run: `sudo pip install requests beautifulsoup4`.
+If you get an about `bs4` missing:
 
-If you plan to use the large image flag, you will need to install `pillow`. This is complicated. I would suggest installing the [source file](https://pypi.python.org/pypi/Pillow/2.6.1) and running `python setup.py install`.
+```
+ImportError: No module named bs4
+```
+
+Then you will need to install dependencies. If you do not already have the `pip` command, run:
+
+```
+sudo easy_install pip
+```
+
+Once `pip` is available, dependencies can be installed with:
+
+```
+sudo pip install requests beautifulsoup4
+```
+
+####Using Large Images
+If you plan to use the large image flag, you will need to install `pillow`. Normally this can be done with:
+
+```
+sudo pip install pillow
+```
+
+If that does not work, try installing the [source file](https://pypi.python.org/pypi/Pillow/2.8.1) and running `python setup.py install`.
 
 _Requirements_: Python 2.7+, Mac OSX Mavericks
 
