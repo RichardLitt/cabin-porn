@@ -63,7 +63,7 @@ if options.image:
 r  = requests.get(url)
 if r.status_code == 200:
   data = r.text
-  soup = BeautifulSoup(data)
+  soup = BeautifulSoup(data, "html.parser")
 
   # Get a list of all of the images of cabins
   cabins = []
