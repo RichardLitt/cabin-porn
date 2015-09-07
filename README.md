@@ -14,7 +14,7 @@ Download cabin-porn-it.py to wherever you want, or clone this entire repository.
 
 Run using `python cabin-porn-it.py` or see below for creating a `cabin` global alias.
 
-If you get an about `bs4` missing:
+If you get an error about `bs4` missing:
 
 ```
 ImportError: No module named bs4
