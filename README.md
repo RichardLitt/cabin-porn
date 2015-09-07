@@ -66,7 +66,7 @@ If you want to use the old crontab, type: `env EDITOR=nano crontab -e`. From the
 
 ###Options
 
-* '-r', choose a random image from the current page
-* '-i', choose a specific image by the post id
-* '-l', limit images to images larger than 1024x748
-* 'path=BASE_DIR', choose a directory for the photos to be put into
+* `-r`, choose a random image from the current page
+* `-i`, choose a specific image by the post id
+* `-l`, limit images to images larger than 1024x748
+* `path=BASE_DIR`, choose a directory for the photos to be put into
