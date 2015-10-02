@@ -72,9 +72,11 @@ if r.status_code == 200:
       image = photo.find("img")
       image_src = str(image.get("src").encode('utf-8'))
       if re.search("jpg|png", image_src):
-        link_str = str(image.get("title").encode('utf-8'))
+        link_str = str(image.get("title"))
         if link_str == "None":
           link_str = post.find("div", "fb-like").get("data-href")
+        else:
+          link_str = link_str.encode('utf-8')
         cabins.append({ "src" : image_src, "link": link_str })
 
   # Choose one of the pictures to download. If random is flagged, pick one from
