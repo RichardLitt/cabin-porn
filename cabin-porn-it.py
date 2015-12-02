@@ -110,7 +110,7 @@ elif r.status_code != 200:
 
 def setFile():
   # generate a fileURL for the desktop picture
-  file_path = NSURL.fileURLWithPath_(base_dir + image_file)
+  file_path = NSURL.fileURLWithPath_(base_dir + image_file.decode("utf-8"))
 
   # get shared workspace
   ws = NSWorkspace.sharedWorkspace()
@@ -120,6 +120,9 @@ def setFile():
       # tell the workspace to set the desktop picture
       (result, error) = ws.setDesktopImageURL_forScreen_options_error_(
                   file_path, screen, ws.desktopImageOptionsForScreen_(screen), None)
+
+      if error:
+        print error
 
 # Check the size of the file
 if options.large_only:
